@@ -1,4 +1,4 @@
-name: Build & Evaluate Model
+name: Build and Evaluate Model
 
 on:
   push:
