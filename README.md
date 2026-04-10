@@ -7,7 +7,6 @@ runs those containers to produce evaluation metrics stored in PostgreSQL.
 ## Repo Structure
 
 ```
-├── containers/                    # .tar Docker images (built by CI, gitignored)
 ├── platform/                      # FastAPI evaluation platform API
 │   ├── src/qml_platform/
 │   │   ├── main.py                # API routes
@@ -30,7 +29,6 @@ runs those containers to produce evaluation metrics stored in PostgreSQL.
 ├── docker-compose.yml
 ├── devbox.json
 └── .github/workflows/
-    ├── evaluate-model.yml         # Build, register, auto-evaluate on tag push
     ├── ci-models.yml              # Model contract tests on PR
     └── ci-platform.yml            # Platform integration tests on PR
 ```
@@ -298,27 +296,14 @@ bash scripts/test-model-contract.sh  # model contract tests
 
 ## CI Workflows
 
-### 1. Build & Evaluate (`evaluate-model.yml`)
-
-**Trigger:** push a tag matching `model-<name>/v<semver>`
-
-```bash
-git tag cluster-classifier/v0.1.0
-git push origin cluster-classifier/v0.1.0
-```
-
-Steps: build Docker image → save `.tar` → commit to repo → register with
-platform → auto-evaluate (model generates its own dataset) → write results
-summary to the GitHub Actions job page.
-
-### 2. Model Contract Tests (`ci-models.yml`)
+### 1. Model Contract Tests (`ci-models.yml`)
 
 **Trigger:** pull request touching `models/**`
 
 Runs `devbox run test:model-contract` — builds each model container and
 validates that all five endpoints respond correctly.
 
-### 3. Platform Integration Tests (`ci-platform.yml`)
+### 2. Platform Integration Tests (`ci-platform.yml`)
 
 **Trigger:** pull request touching `platform/**` or `docker-compose.yml`
 
