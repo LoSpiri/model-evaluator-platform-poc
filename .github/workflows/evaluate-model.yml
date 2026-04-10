@@ -47,7 +47,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add "containers/${{ steps.parse.outputs.tar_filename }}"
+          git add --force "containers/${{ steps.parse.outputs.tar_filename }}"
           git commit -m "ci: add ${{ steps.parse.outputs.tar_filename }}"
           git push origin HEAD:main
 
