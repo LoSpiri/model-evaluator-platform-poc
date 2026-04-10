@@ -1,6 +1,6 @@
 # QML Model Evaluation Platform (POC)
 
-A monorepo for evaluating Quantum ML models. Researchers build models from a
+A monorepo for evaluating ML models. Build models from a
 template, CI packages them as Docker images, and the platform API loads and
 runs those containers to produce evaluation metrics stored in PostgreSQL.
 
