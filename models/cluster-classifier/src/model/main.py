@@ -1,7 +1,7 @@
 """
 Cluster Classifier
 ===================
-A minimal PyTorch binary classifier that separates two 2D point clusters
+A minimal PyTorch binary classifier that separates two 2-D point clusters
 (left vs right). Trains a single linear layer on startup.
 """
 
