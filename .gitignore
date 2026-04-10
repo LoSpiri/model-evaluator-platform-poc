@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+.venv/
+
+# Environment
+.env
+!.env.example
+
+# Docker image tarballs (built by CI)
+containers/*.tar
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

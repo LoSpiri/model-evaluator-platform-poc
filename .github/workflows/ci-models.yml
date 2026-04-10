@@ -1,0 +1,20 @@
+name: CI — Model Contract Tests
+
+on:
+  pull_request:
+    paths:
+      - "models/**"
+
+jobs:
+  test-model-contract:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install devbox
+        uses: jetify-com/devbox-install-action@v0.12.0
+
+      - name: Run model contract tests
+        run: devbox run test:model-contract

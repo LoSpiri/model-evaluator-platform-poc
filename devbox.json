@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.17.1/.schema/devbox.schema.json",
+  "packages": [
+    "python@3.11.12",
+    "uv@0.11.3",
+    "docker@28.5.1",
+    "postgresql_15@15.12",
+    "curl",
+    "jq"
+  ],
+  "shell": {
+    "init_hook": [
+      "echo 'QML Platform dev environment ready.'"
+    ],
+    "scripts": {
+      "up": ["docker compose up --build -d"],
+      "down": ["docker compose down"],
+      "down:clean": ["docker compose down -v"],
+      "logs": ["docker compose logs -f"],
+      "test:model-contract": ["bash scripts/test-model-contract.sh"],
+      "test:platform": ["bash scripts/test-platform.sh"],
+      "test:all": ["bash scripts/test-platform.sh && bash scripts/test-model-contract.sh"]
+    }
+  }
+}

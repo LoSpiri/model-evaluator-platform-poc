@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: qml
+      POSTGRES_PASSWORD: qml
+      POSTGRES_DB: qml
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U qml"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - qml-net
+
+  platform:
+    build:
+      context: ./platform
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+asyncpg://qml:qml@db:5432/qml
+      CONTAINERS_DIR: /app/containers
+      DOCKER_NETWORK: ""
+      HOST: "0.0.0.0"
+      PORT: "8000"
+      HEALTH_POLL_TIMEOUT: "60"
+      HEALTH_POLL_INTERVAL: "1.0"
+    volumes:
+      - ./containers:/app/containers
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8000:8000"
+    networks:
+      - qml-net
+
+volumes:
+  pgdata:
+
+networks:
+  qml-net:
+    driver: bridge
