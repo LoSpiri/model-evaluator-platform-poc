@@ -15,7 +15,7 @@ import torch.nn as nn
 from fastapi import FastAPI
 
 MODEL_NAME = "cluster-classifier"
-MODEL_VERSION = "0.1.0"
+MODEL_VERSION = "1.0.0"
 MODEL_DESCRIPTION = "Binary classifier for 2D point clusters (left=0 vs right=1)"
 MODEL_PARAMETERS: dict[str, Any] = {
     "architecture": "Linear(2,1)+Sigmoid",
