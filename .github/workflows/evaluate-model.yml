@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      PLATFORM_URL: ${{ secrets.PLATFORM_URL || vars.PLATFORM_URL }}
 
     steps:
       - name: Checkout
@@ -51,10 +53,9 @@ jobs:
 
       - name: Register model with platform
         id: register
-        if: ${{ vars.PLATFORM_URL != '' || secrets.PLATFORM_URL != '' }}
+        if: ${{ env.PLATFORM_URL != '' }}
         run: |
-          PLATFORM="${PLATFORM_URL:-${{ vars.PLATFORM_URL }}}"
-          RESPONSE=$(curl -sf -X POST "${PLATFORM}/api/models/register" \
+          RESPONSE=$(curl -sf -X POST "${PLATFORM_URL}/api/models/register" \
             -H "Content-Type: application/json" \
             -d "{
               \"name\": \"${{ steps.parse.outputs.model_name }}\",
@@ -64,17 +65,14 @@ jobs:
           MODEL_ID=$(echo "$RESPONSE" | jq -r '.id')
           echo "model_id=$MODEL_ID" >> "$GITHUB_OUTPUT"
           echo "Registered model: $MODEL_ID"
-        env:
-          PLATFORM_URL: ${{ secrets.PLATFORM_URL }}
 
       - name: Auto-evaluate model
         id: evaluate
         if: steps.register.outputs.model_id != ''
         run: |
-          PLATFORM="${PLATFORM_URL:-${{ vars.PLATFORM_URL }}}"
           MODEL_ID="${{ steps.register.outputs.model_id }}"
 
-          RESULT=$(curl -sf -X POST "${PLATFORM}/api/models/${MODEL_ID}/evaluate" \
+          RESULT=$(curl -sf -X POST "${PLATFORM_URL}/api/models/${MODEL_ID}/evaluate" \
             -H "Content-Type: application/json" \
             --max-time 300 \
             -d '{"n_samples": 50}')
@@ -83,8 +81,6 @@ jobs:
 
           STATUS=$(echo "$RESULT" | jq -r '.status')
           echo "Evaluation status: $STATUS"
-        env:
-          PLATFORM_URL: ${{ secrets.PLATFORM_URL }}
 
       - name: Write evaluation summary
         if: steps.evaluate.outputs.result != ''
